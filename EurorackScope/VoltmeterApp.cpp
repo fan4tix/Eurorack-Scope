@@ -1,0 +1,47 @@
+
+#include <Arduino.h>
+#include "VoltmeterApp.h"
+#include <math.h>
+#include "App.h"
+#include "Menu.h"
+VoltmeterApp::VoltmeterApp(const Menu* menu)
+  : App(menu) {
+}
+
+void VoltmeterApp::draw(UIContext& ctx, bool fullRedraw) {
+  auto d = ctx.display;
+  auto dsp = ctx.dsp;
+  if (fullRedraw) {
+    d->clearDisplay();
+    d->setTextSize(1);
+    d->setTextColor(SH110X_WHITE, SH110X_BLACK);
+    d->setCursor(18, 12);
+    d->print("CH1:");
+    d->setCursor(78, 12);
+    d->print("CH2:");
+    d->drawLine(60, 12, 60, 60, SH110X_WHITE);
+    d->setTextSize(1);
+    d->setTextColor(SH110X_WHITE, SH110X_BLACK);
+    d->setCursor(36, 0);
+    d->println("Voltmeter");
+  }
+  d->setTextSize(1);
+  d->setTextColor(SH110X_WHITE, SH110X_BLACK);
+  d->setCursor(0, 46);
+  d->printf("Min:%2.2fV ", dsp->getVoltageMin());
+  d->setCursor(0, 55);
+  d->printf("Max:%2.2fV ", dsp->getVoltageMax());
+  d->setCursor(64, 46);
+  d->printf("Min:%2.2fV ", dsp->getVoltageMin());
+  d->setCursor(64, 55);
+  d->printf("Max:%2.2fV ", dsp->getVoltageMax());
+
+  d->setTextSize(2);
+  d->setCursor(0, 24);
+  d->printf("%.2f ", dsp->getVoltageDC());
+
+  d->setCursor(64, 24);
+  d->printf("%.2f ", dsp->getVoltageDC());
+
+  d->display();
+}
