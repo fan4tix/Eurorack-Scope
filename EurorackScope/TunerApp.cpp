@@ -17,7 +17,7 @@ void TunerApp::draw(UIContext& ctx, bool fullRedraw)
 {
   auto d = ctx.display;
   auto dsp = ctx.dsp;
-  dsp->computeFFT();
+  dsp->getChannel(0)->computeFFT();
   if (fullRedraw) {
 
 

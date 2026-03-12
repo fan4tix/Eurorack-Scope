@@ -13,7 +13,7 @@ void FFTApp::draw(UIContext& ctx, bool fullRedraw)
   auto d = ctx.display;
   auto dsp = ctx.dsp;
 
-    dsp->computeFFT();
+    dsp->getChannel(0)->computeFFT();
   uint8_t width = d->width();
   const uint8_t BOTTOM = d->height() - 2;
   uint8_t step = DSP_MAX_SAMPLES / width;
@@ -25,7 +25,7 @@ void FFTApp::draw(UIContext& ctx, bool fullRedraw)
   d->setCursor(36, 0);
   d->println("   FFT");
 
-  float* buffer = dsp->getSpectrum();
+  float* buffer = dsp->getChannel(0)->getSpectrum();
 
   for (uint16_t i = 0; i < width; i++) {
     uint8_t y = constrain(floor(BOTTOM - buffer[i * SAMPLING_INTERVAL] * SCALE), 9, BOTTOM);

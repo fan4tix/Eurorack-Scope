@@ -25,11 +25,12 @@ d->setTextSize(1);
     d->setCursor(36, 0);
     d->println("Lissajous");
     
-  float* buffer = dsp->getWaveformFloat();
+  float* buffer0 = dsp->getChannel(0)->getWaveformFloat();
+  float* buffer1 = dsp->getChannel(1)->getWaveformFloat();
 
   for (uint16_t i = 0; i < 128; i++)
-    d->drawPixel(floor(CENTER_X - buffer[i] * RANGE / 2),
-                 floor(CENTER_Y - buffer[i] * RANGE / 2),
+    d->drawPixel(floor(CENTER_X - buffer0[i] * RANGE / 2),
+                 floor(CENTER_Y - buffer1[i] * RANGE / 2),
                  SH110X_WHITE);
   d->display();
 }

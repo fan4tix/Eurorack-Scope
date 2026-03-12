@@ -22,6 +22,7 @@
 #include "pinout.h"
 #include "App.h"
 #include "UI.h"
+
 #include "UIContext.h"
 #include "Buttons.h"
 #include "DSP.h"
@@ -64,7 +65,7 @@ Buttons buttons(pins, 2, 8);
 
 PSU psu;
 
-DSP dsp(28);  // GPIO28 = ADC2
+DSP dsp(28, 29);  // GPIO28 = ADC2
 
 Adafruit_SH1106G display = Adafruit_SH1106G(128, 64, P_OLED_MOSI, P_OLED_CLK, P_OLED_DC, P_OLED_RESET, P_OLED_CS);
 
@@ -140,7 +141,7 @@ void loop() {
     //  Serial.print("DMA busy: ");
     //  Serial.println(dma_channel_is_busy(dsp._dmaChannel));
     Serial.print("Waveform[0]: ");
-    Serial.println(dsp.getWaveformFloat()[0]);
+    Serial.println(dsp.getChannel(0)->getWaveformFloat()[0]);
   }
 }
 void setupWire() {

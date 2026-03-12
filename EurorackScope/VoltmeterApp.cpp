@@ -28,20 +28,20 @@ void VoltmeterApp::draw(UIContext& ctx, bool fullRedraw) {
   d->setTextSize(1);
   d->setTextColor(SH110X_WHITE, SH110X_BLACK);
   d->setCursor(0, 46);
-  d->printf("Min:%2.2fV ", dsp->getVoltageMin());
+  d->printf("Min:%2.2fV ", dsp->getChannel(0)->getVoltageMin());
   d->setCursor(0, 55);
-  d->printf("Max:%2.2fV ", dsp->getVoltageMax());
+  d->printf("Max:%2.2fV ", dsp->getChannel(0)->getVoltageMax());
   d->setCursor(64, 46);
-  d->printf("Min:%2.2fV ", dsp->getVoltageMin());
+  d->printf("Min:%2.2fV ", dsp->getChannel(1)->getVoltageMin());
   d->setCursor(64, 55);
-  d->printf("Max:%2.2fV ", dsp->getVoltageMax());
+  d->printf("Max:%2.2fV ", dsp->getChannel(1)->getVoltageMax());
 
   d->setTextSize(2);
   d->setCursor(0, 24);
-  d->printf("%.2f ", dsp->getVoltageDC());
+  d->printf("%.2f ", dsp->getChannel(0)->getVoltageDC());
 
   d->setCursor(64, 24);
-  d->printf("%.2f ", dsp->getVoltageDC());
+  d->printf("%.2f ", dsp->getChannel(1)->getVoltageDC());
 
   d->display();
 }
