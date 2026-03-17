@@ -16,7 +16,7 @@ void LissajousApp::draw(UIContext& ctx, bool fullRedraw)
   
   const uint8_t CENTER_X = 63;
   
-  const float RANGE = 100.0f;
+  const float RANGE = .1f;
   auto d = ctx.display;
   auto dsp = ctx.dsp;
   d->clearDisplay();

@@ -1,12 +1,16 @@
 #include "DSPChannel.h"
 
 
-DSPChannel::DSPChannel(uint8_t adcPin, uint16_t sampleSize, uint32_t sampleRate)
-  : _adcPin(adcPin), _sampleSize(sampleSize), _sampleRate(sampleRate), _rms(0.0f), _dc(0.0f), _vMin(0.0f), _vMax(0.0f), _fundamentalFreq(0.0f), _currentBuffer(0), _bufferReady(false) {}
+DSPChannel::DSPChannel()
+  : _adcPin(0), _sampleSize(0), _sampleRate(0), _rms(0.0f), _dc(0.0f), _vMin(0.0f), _vMax(0.0f), _fundamentalFreq(0.0f), _currentBuffer(0), _bufferReady(false) {}
 
-void DSPChannel::begin() {
+void DSPChannel::begin(uint8_t adcPin, uint16_t sampleSize, uint32_t sampleRate, uint16_t* buffer) {
   // Initialize active buffer pointer
-  _activeBuffer = _buffers[0];
+  _adcPin = adcPin;
+  _sampleSize = sampleSize;
+  _sampleRate = sampleRate;
+ 
+  _activeBuffer = buffer;
 
   // Initialize FFT
   arm_cfft_init_f32(&_cfft, _sampleSize);
@@ -17,30 +21,6 @@ void DSPChannel::begin() {
   }
 }
 
-void DSPChannel::changeSampleSize(uint16_t newSampleSize) {
-  // Ensure power of 2 for FFT
-  if (newSampleSize & (newSampleSize - 1)) {
-    while (newSampleSize & (newSampleSize - 1)) {
-      newSampleSize--;
-    }
-  }
-
-  if (newSampleSize == _sampleSize) return;
-  if (newSampleSize > DSP_MAX_SAMPLES) newSampleSize = DSP_MAX_SAMPLES;
-
-
-  // Update size
-  _sampleSize = newSampleSize;
-
-  // Reinitialize FFT for new size
-  arm_cfft_init_f32(&_cfft, _sampleSize);
-
-  // Recompute window for new size
-  for (uint16_t i = 0; i < _sampleSize; i++) {
-    _window[i] = 0.5f * (1.0f - cosf(2.0f * M_PI * i / (_sampleSize - 1)));
-  }
-
-}
 //=============================================================================
 // Getters & Setters
 //=============================================================================
@@ -184,14 +164,14 @@ float DSPChannel::computeHPSFrequency() {
 //=============================================================================
 // Buffer Processing
 //=============================================================================
-void DSPChannel::processBuffer(uint16_t* processBufferPtr) {
+void DSPChannel::processBuffer() {
   float sum = 0.0f;
   float sumSq = 0.0f;
   _vMin = 1000.0f;
   _vMax = -1000.0f;
 
   for (uint16_t i = 0; i < _sampleSize; i++) {
-    float v = ((processBufferPtr[i] - ADC_OFFSET) / ADC_MAX) * ADC_REF;
+    float v = ((_activeBuffer[i] - ADC_OFFSET) / ADC_MAX) * ADC_REF;
     _fbuffer[i] = v;
     sum += v;
 
@@ -204,3 +184,5 @@ void DSPChannel::processBuffer(uint16_t* processBufferPtr) {
   _rms = sqrtf(sumSq / _sampleSize);
   _dc = sum / _sampleSize;
 }
+
+

@@ -24,7 +24,7 @@ void ScopeApp::draw(UIContext& ctx, bool fullRedraw) {
   else
     d->fillRect(0, 9, 128, 63, SH110X_BLACK);
   drawUI(ctx);
-  float* buffer = dsp->getChannel(0)->getWaveformFloat();
+  float* buffer = dsp->getChannel(_channelIndex%2)->getWaveformFloat();
 
   float max = -9999;
   for (uint16_t i = 0; i < 128; i++) {
