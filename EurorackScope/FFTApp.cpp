@@ -4,16 +4,18 @@
 #include "App.h"
 #include "Menu.h"
 FFTApp::FFTApp(const Menu* menu)
-: App(menu)
-{
+  : App(menu) {
 }
 
-void FFTApp::draw(UIContext& ctx, bool fullRedraw)
-{
+void FFTApp::draw(UIContext& ctx, bool fullRedraw) {
   auto d = ctx.display;
   auto dsp = ctx.dsp;
 
-    dsp->getChannel(0)->computeFFT();
+  _activeChannel += ctx.encoderDelta;
+  _activeChannel %= 2;
+
+
+  dsp->getChannel(_activeChannel)->computeFFT();
   uint8_t width = d->width();
   const uint8_t BOTTOM = d->height() - 2;
   uint8_t step = DSP_MAX_SAMPLES / width;
@@ -23,9 +25,9 @@ void FFTApp::draw(UIContext& ctx, bool fullRedraw)
   d->setTextSize(1);
   d->setTextColor(SH110X_WHITE, SH110X_BLACK);
   d->setCursor(36, 0);
-  d->println("   FFT");
+  d->printf("FFT (CH%d)\n",_activeChannel+1);
 
-  float* buffer = dsp->getChannel(0)->getSpectrum();
+  float* buffer = dsp->getChannel(_activeChannel)->getSpectrum();
 
   for (uint16_t i = 0; i < width; i++) {
     uint8_t y = constrain(floor(BOTTOM - buffer[i * SAMPLING_INTERVAL] * SCALE), 9, BOTTOM);

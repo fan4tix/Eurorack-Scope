@@ -11,4 +11,5 @@ public:
 
 private:
     bool _gridDrawn = false;
+    uint8_t _activeChannel = 0;
 };

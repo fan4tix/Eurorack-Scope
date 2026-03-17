@@ -20,13 +20,13 @@ void PSU::update() {
 
     case 0:
       _voltages[A][PLUS5] =
-        readRP2040(27, (3.06f / 2.0f));  // ADC1
+        readRP2040(27, (11.0f / 2.0f));  // ADC1
       _adsState++;
       break;
 
     case 1:
       _voltages[A][PLUS12] =
-        readRP2040(26, (46.0f / 12.85));  // ADC0
+        readRP2040(26, (70.6f / 12.85));  // ADC0
       _adsState++;
       break;
 
@@ -38,7 +38,7 @@ void PSU::update() {
       } else if (_ads.conversionComplete()) {
         uint16_t raw = _ads.getLastConversionResults();
         _voltages[A][MINUS12] =
-          -convertADS(raw, (703.0f / 200.0f), false);
+          -convertADS(raw, (878.0f / 200.0f), false);
         _adsBusy = false;
         _adsState++;
       }
@@ -51,7 +51,7 @@ void PSU::update() {
       } else if (_ads.conversionComplete()) {
         uint16_t raw = _ads.getLastConversionResults();
         _voltages[B][PLUS5] =
-          convertADS(raw, (238.0f / 100.0f), false);
+          convertADS(raw, (385.0f / 100.0f), false);
         _adsBusy = false;
         _adsState++;
       }
@@ -64,7 +64,7 @@ void PSU::update() {
       } else if (_ads.conversionComplete()) {
         uint16_t raw = _ads.getLastConversionResults();
         _voltages[B][PLUS12] =
-          convertADS(raw, (5.77f / 2.0f), false);
+          convertADS(raw, (42.0f / 2.0f), false);
         _adsBusy = false;
         _adsState++;
       }
@@ -77,7 +77,7 @@ void PSU::update() {
       } else if (_ads.conversionComplete()) {
         uint16_t raw = _ads.getLastConversionResults();
         _voltages[B][MINUS12] =
-          -convertADS(raw, (707.0f / 200.0f), false);
+          -convertADS(raw, (889.0f / 200.0f), false);
         _adsBusy = false;
         _adsState = 0;
       }
