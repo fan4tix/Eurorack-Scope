@@ -9,4 +9,5 @@ public:
 
 private:
     bool _gridDrawn = false;
+    int8_t _screen = 0;  // 0 = voltage, 1 = current
 };

@@ -9,9 +9,20 @@ PSUApp::PSUApp(const Menu* menu)
 }
 
 void PSUApp::draw(UIContext& ctx, bool fullRedraw) {
+  static int8_t lastScreen = -1;
+
+  if (_screen != lastScreen) {
+    fullRedraw = true;
+    lastScreen = _screen;
+  }
 
   auto d = ctx.display;
   auto psu = ctx.psu;
+
+  _screen += ctx.encoderDelta;
+
+  _screen %= 2;
+
   psu->update();
   const uint8_t COL1 = 0, COL2 = 35, COL3 = 80, OFFSET = 5;
   if (fullRedraw) {
@@ -19,7 +30,10 @@ void PSUApp::draw(UIContext& ctx, bool fullRedraw) {
     d->setTextSize(1);
     d->setTextColor(SH110X_WHITE, SH110X_BLACK);
     d->setCursor(36, 0);
-    d->println("PSU Stats");
+    if (_screen == 0)
+      d->println("Voltages");
+    else
+      d->println("Currents");
 
     // Draw Legend:
     d->setCursor(COL1, 2 * LINE_HEIGHT);
@@ -44,22 +58,44 @@ void PSUApp::draw(UIContext& ctx, bool fullRedraw) {
   }
   d->setTextSize(1);
   d->setTextColor(SH110X_WHITE, SH110X_BLACK);
-
   // CH A
   d->setCursor(COL2, OFFSET + 3 * LINE_HEIGHT);
-  d->printf("% .2fV", psu->getVoltage(PSU::A, PSU::PLUS5));
+  if (_screen == 0)
+    d->printf("% .2fV", psu->getVoltage(PSU::A, PSU::PLUS5));
+  else
+    d->printf("% .2fA", psu->getCurrent(PSU::A, PSU::PLUS5));
+
   d->setCursor(COL2, OFFSET + 4 * LINE_HEIGHT);
-  d->printf("% .2fV", psu->getVoltage(PSU::A, PSU::PLUS12));
+  if (_screen == 0)
+    d->printf("% .2fV", psu->getVoltage(PSU::A, PSU::PLUS12));
+  else
+    d->printf("% .2fA", psu->getCurrent(PSU::A, PSU::PLUS12));
+
   d->setCursor(COL2, OFFSET + 5 * LINE_HEIGHT);
-  d->printf("%.2fV", psu->getVoltage(PSU::A, PSU::MINUS12));
+  if (_screen == 0)
+    d->printf("%.2fV", psu->getVoltage(PSU::A, PSU::MINUS12));
+  else
+    d->printf("%.2fA", psu->getCurrent(PSU::A, PSU::MINUS12));
+
 
   // CH B
   d->setCursor(COL3, OFFSET + 3 * LINE_HEIGHT);
-  d->printf("% .2fV", psu->getVoltage(PSU::B, PSU::PLUS5));
+  if (_screen == 0)
+    d->printf("% .2fV", psu->getVoltage(PSU::B, PSU::PLUS5));
+  else
+    d->printf("% .2fA", psu->getCurrent(PSU::B, PSU::PLUS5));
+
   d->setCursor(COL3, OFFSET + 4 * LINE_HEIGHT);
-  d->printf("% .2fV", psu->getVoltage(PSU::B, PSU::PLUS12));
+  if (_screen == 0)
+    d->printf("% .2fV", psu->getVoltage(PSU::B, PSU::PLUS12));
+  else
+    d->printf("% .2fA", psu->getCurrent(PSU::B, PSU::PLUS12));
+
   d->setCursor(COL3, OFFSET + 5 * LINE_HEIGHT);
-  d->printf("%.2fV", psu->getVoltage(PSU::B, PSU::MINUS12));
+  if (_screen == 0)
+    d->printf("%.2fV", psu->getVoltage(PSU::B, PSU::MINUS12));
+  else
+    d->printf("%.2fA", psu->getCurrent(PSU::B, PSU::MINUS12));
 
   d->display();
 }
