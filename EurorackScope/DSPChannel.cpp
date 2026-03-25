@@ -2,7 +2,7 @@
 
 
 DSPChannel::DSPChannel()
-  : _currentBuffer(0), _bufferReady(false), _sampleRate(0), _sampleSize(0), _adcPin(0), _dc(0.0f), _rms(0.0f), _vMin(0.0f), _vMax(0.0f), _fundamentalFreq(0.0f) {}
+  : _currentBuffer(0), _bufferReady(false), _sampleRate(0), _sampleSize(0), _adcPin(0), _dc(0.0f), _rms(0.0f), _vMin(0.0f), _vMax(0.0f), _fundamentalFreq(0.0f), _calibrationOffset(0.0f) {}
 
 void DSPChannel::begin(uint8_t adcPin, uint16_t sampleSize, uint32_t sampleRate, uint16_t* buffer) {
   // Initialize active buffer pointer
@@ -180,7 +180,7 @@ void DSPChannel::processBuffer() {
   _vMax = -1000.0f;
 
   for (uint16_t i = 0; i < _sampleSize; i++) {
-    float v = adcCountToInputVolts(_activeBuffer[i]);
+    float v = adcCountToInputVolts(_activeBuffer[i]) - _calibrationOffset;
     _fbuffer[i] = v;
     sum += v;
 
@@ -196,6 +196,15 @@ void DSPChannel::processBuffer() {
 
 void DSPChannel::setSampleRate(uint32_t sampleRate) {
   _sampleRate = sampleRate;
+}
+
+void DSPChannel::calibrate() {
+  // Accumulate: new offset = raw DC = current displayed DC + existing offset.
+  _calibrationOffset += _dc;
+}
+
+void DSPChannel::clearCalibration() {
+  _calibrationOffset = 0.0f;
 }
 
 

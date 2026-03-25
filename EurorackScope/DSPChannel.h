@@ -43,6 +43,10 @@ public:
   void processBuffer();
   void setSampleRate(uint32_t sampleRate);
 
+  // Calibration
+  void calibrate();
+  void clearCalibration();
+
 
 
 
@@ -68,6 +72,7 @@ private:
   float _vMin;
   float _vMax;
   float _fundamentalFreq;
+  float _calibrationOffset;
 
   // FFT instance
   arm_cfft_instance_f32 _cfft;

@@ -10,6 +10,7 @@
 #define MODE_TUNER 4
 #define MODE_VOLTMETER 5
 extern UI ui;
+extern DSP dsp;
 extern int8_t scopeTrigger;
 // --------------------------------------------------
 enum MenuType {
@@ -104,6 +105,35 @@ const Menu systemMenu = {
 
 
 
+// --------------------------------------------------
+// Calibrate
+// --------------------------------------------------
+inline void actionCalibrateCh1() {
+  dsp.getChannel(0)->calibrate();
+  ui.back();
+}
+inline void actionCalibrateCh2() {
+  dsp.getChannel(1)->calibrate();
+  ui.back();
+}
+inline void actionCalibrateBoth() {
+  dsp.getChannel(0)->calibrate();
+  dsp.getChannel(1)->calibrate();
+  ui.back();
+}
+
+const MenuItem calibrateItems[] = {
+  { "CH1",  MENU_ACTION, nullptr, actionCalibrateCh1,  nullptr, 0, 0, 0 },
+  { "CH2",  MENU_ACTION, nullptr, actionCalibrateCh2,  nullptr, 0, 0, 0 },
+  { "Both", MENU_ACTION, nullptr, actionCalibrateBoth, nullptr, 0, 0, 0 }
+};
+
+const Menu calibrateMenu = {
+  "Calibrate",
+  calibrateItems,
+  3
+};
+
 
 // --------------------------------------------------
 // Settings
@@ -148,6 +178,7 @@ const Menu modeMenu = {
 const MenuItem scopeItems[] = {
 
   { "Mode", MENU_SUBMENU, &modeMenu, 0, 0, 0, 0, 0 },
+  { "Calibrate", MENU_SUBMENU, &calibrateMenu, 0, 0, 0, 0, 0 },
   { "Settings", MENU_SUBMENU, &settingsMenu, 0, 0, 0, 0, 0 }
 };
 
@@ -155,7 +186,7 @@ const MenuItem scopeItems[] = {
 const Menu scopeMenu = {
   "Scope",
   scopeItems,
-  2
+  3
   //NULL
 };
 
@@ -222,6 +253,7 @@ const Menu tunerMenu = {
 const MenuItem lissaItems[] = {
 
   { "Mode", MENU_SUBMENU, &modeMenu, 0, 0, 0, 0, 0 },
+  { "Calibrate", MENU_SUBMENU, &calibrateMenu, 0, 0, 0, 0, 0 },
   { "Settings", MENU_SUBMENU, &settingsMenu, 0, 0, 0, 0, 0 }
 
 };
@@ -229,8 +261,8 @@ const MenuItem lissaItems[] = {
 
 const Menu lissaMenu = {
   "Lissajous",
-  tunerItems,
-  2
+  lissaItems,
+  3
   //NULL
 };
 
@@ -240,8 +272,9 @@ const Menu lissaMenu = {
 // --------------------------------------------------
 const MenuItem voltmeterItems[] = {
 
-  { "Mode", MENU_SUBMENU, &modeMenu, 0, 0, 0, 0, 0 },
-  { "Settings", MENU_SUBMENU, &settingsMenu, 0, 0, 0, 0, 0 }
+  { "Mode",      MENU_SUBMENU, &modeMenu,               0, 0, 0, 0, 0 },
+  { "Calibrate", MENU_SUBMENU, &calibrateMenu, 0, 0, 0, 0, 0 },
+  { "Settings",  MENU_SUBMENU, &settingsMenu,           0, 0, 0, 0, 0 }
 
 };
 
@@ -249,7 +282,7 @@ const MenuItem voltmeterItems[] = {
 const Menu voltmeterMenu = {
   "Voltmeter",
   voltmeterItems,
-  2
+  3
   //NULL
 };
 
