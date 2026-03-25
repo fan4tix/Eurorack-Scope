@@ -4,8 +4,16 @@
 #include <math.h>
 #include "App.h"
 #include "Menu.h"
+
+// Target ~30 Hz update rate: sampleRate = sampleSize × fps = 2048 × 30
+static const uint32_t kVoltmeterSampleRateHz = 61440;
+
 VoltmeterApp::VoltmeterApp(const Menu* menu)
   : App(menu) {
+}
+
+void VoltmeterApp::onEnter(UIContext& ctx) {
+  ctx.dsp->changeSampleRate(kVoltmeterSampleRateHz);
 }
 
 void VoltmeterApp::draw(UIContext& ctx, bool fullRedraw) {
