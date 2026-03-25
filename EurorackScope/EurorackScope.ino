@@ -161,13 +161,13 @@ void setupSPI() {
 void showBootScreen() {
 
   display.clearDisplay();
-
+  display.drawRect(10, 4, 104, 48, SH110X_WHITE);
   display.setTextColor(SH110X_WHITE);
-  display.setCursor(0, 0);
+  display.setCursor(38, 10);
   display.println("Eurorack");
-
+  display.setCursor(46, 22);
   display.println("Scope");
-
+  display.setCursor(16, 34);
   display.println("Initializing...");
 
   display.display();
