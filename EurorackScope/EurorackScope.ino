@@ -81,7 +81,7 @@ UI ui(&ctx,
 void setup() {
   Serial.begin(115200);
   Serial.println("Setup start");
-  dsp.begin(256, 512);
+  dsp.begin(256, 2048);
 
   setupWire();
   //setupSPI();
@@ -119,8 +119,8 @@ void loop() {
   long pos = encoder.position / 256;  // Magic Number
   encoderDelta = lastEncPos - pos;
   lastEncPos = pos;
-  bool encoderPressed = buttons.pressed(P_ENC_BTN);
-  bool backPressed = buttons.pressed(P_BACK_BTN);
+  //bool encoderPressed = buttons.pressed(P_ENC_BTN);
+  //bool backPressed = buttons.pressed(P_BACK_BTN);
 
 
   // --------------------------------

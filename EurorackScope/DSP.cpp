@@ -12,6 +12,8 @@ void DSP::begin(uint32_t sampleRate, uint16_t sampleSize)
 {
     _sampleRate = sampleRate;
     _sampleSize = sampleSize;
+    _currentDMABuffer = 0;
+    _bufferReady = false;
     
   _channels[0].begin(_pin0, _sampleSize, _sampleRate, _ch0);
   _channels[1].begin(_pin1, _sampleSize, _sampleRate, _ch1);
@@ -31,7 +33,8 @@ void DSP::setupADC()
     uint ch0 = _pin0 - 26;
     uint ch1 = _pin1 - 26;
 
-    adc_set_round_robin((1 << ch0) | (1 << ch1));
+    adc_set_round_robin((1u << ch0) | (1u << ch1));
+    alignADCChannelOrder();
 
     adc_fifo_setup(
         true,
@@ -41,8 +44,22 @@ void DSP::setupADC()
         false
     );
 
-    float div = 48000000.0f / (_sampleRate * 96.0f);
+    // Period = (1 + div) ADC clock cycles @ 48 MHz.
+    // Two channels in round-robin → total ADC rate = 2 × _sampleRate.
+    float div = 48000000.0f / (2.0f * _sampleRate) - 1.0f;
     adc_set_clkdiv(div);
+}
+
+void DSP::alignADCChannelOrder()
+{
+    uint ch0 = _pin0 - 26;
+    uint ch1 = _pin1 - 26;
+
+    // Re-anchor round-robin sequencing so DMA even samples are always channel 0.
+    adc_set_round_robin(0);
+    adc_select_input(ch0);
+    adc_fifo_drain();
+    adc_set_round_robin((1u << ch0) | (1u << ch1));
 }
 
 void DSP::setupDMA()
@@ -138,6 +155,12 @@ uint16_t* DSP::getWaveform(uint8_t ch)
     else return _ch1;
 }
 
+float* DSP::getWaveformVolts(uint8_t ch)
+{
+    if(ch > 1) return nullptr;
+    return _channels[ch].getWaveformVolts();
+}
+
 uint16_t DSP::getSampleSize()
 {
     return _sampleSize;
@@ -160,6 +183,8 @@ void DSP::changeSampleRate(uint32_t newRate)
         return;
 
     _sampleRate = newRate;
+    _channels[0].setSampleRate(_sampleRate);
+    _channels[1].setSampleRate(_sampleRate);
 
     // ---- Disable DMA interrupt ----
     dma_channel_set_irq0_enabled(_dma, false);
@@ -176,11 +201,14 @@ void DSP::changeSampleRate(uint32_t newRate)
     // ---- Clear FIFO ----
     adc_fifo_drain();
 
+    // ---- Reset round-robin phase so interleaved samples stay ch0/ch1 ----
+    alignADCChannelOrder();
+
     // ---- Clear pending DMA interrupt ----
     dma_hw->ints0 = 1u << _dma;
 
     // ---- Update ADC clock ----
-    float div = 48000000.0f / (_sampleRate * 96.0f);
+    float div = 48000000.0f / (2.0f * _sampleRate) - 1.0f;
     adc_set_clkdiv(div);
 
     // ---- Reset buffer state ----

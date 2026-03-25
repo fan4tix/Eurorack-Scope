@@ -148,7 +148,6 @@ const Menu modeMenu = {
 const MenuItem scopeItems[] = {
 
   { "Mode", MENU_SUBMENU, &modeMenu, 0, 0, 0, 0, 0 },
-  { "Trigger", MENU_VALUE, nullptr, 0, &scopeTrigger, 0, 2, 1 },
   { "Settings", MENU_SUBMENU, &settingsMenu, 0, 0, 0, 0, 0 }
 };
 

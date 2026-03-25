@@ -9,11 +9,11 @@
 #include "arm_math.h"
 #include <math.h>
 
-#define DSP_MAX_SAMPLES 1024
-#define ADC_REF 20.0f  // 20v pp
-//#define ADC_SCALE_1 0.1581f // Initial voltage divider scaling
-#define ADC_MAX 4095.0f
-#define ADC_OFFSET (ADC_MAX * 47.0f / 100.0f)  // Offset
+#define DSP_MAX_SAMPLES 2048
+#define ADC_MAX_COUNTS 4095.0f
+#define ADC_VREF_VOLTS 3.3f
+#define ADC_INPUT_OFFSET_VOLTS 1.4942857f
+#define ADC_INPUT_DIVIDER_GAIN 0.022142848f
 #define NUM_DMA_BUFFERS 2
 
 class DSPChannel {
@@ -34,12 +34,14 @@ public:
   // Scope
   uint16_t* getWaveform();
   float* getWaveformFloat();
+  float* getWaveformVolts();
 
   // FFT
   float* getSpectrum();
   float getFundamentalFrequency();
   void computeFFT();
   void processBuffer();
+  void setSampleRate(uint32_t sampleRate);
 
 
 
@@ -47,6 +49,7 @@ public:
 private:
   void detectFundamental();
   float computeHPSFrequency();
+  float adcCountToInputVolts(uint16_t adcCount) const;
   uint16_t* _activeBuffer;  // Points to current buffer for processing
 
   uint32_t _sampleRate;

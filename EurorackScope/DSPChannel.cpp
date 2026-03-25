@@ -2,7 +2,7 @@
 
 
 DSPChannel::DSPChannel()
-  : _adcPin(0), _sampleSize(0), _sampleRate(0), _rms(0.0f), _dc(0.0f), _vMin(0.0f), _vMax(0.0f), _fundamentalFreq(0.0f), _currentBuffer(0), _bufferReady(false) {}
+  : _currentBuffer(0), _bufferReady(false), _sampleRate(0), _sampleSize(0), _adcPin(0), _dc(0.0f), _rms(0.0f), _vMin(0.0f), _vMax(0.0f), _fundamentalFreq(0.0f) {}
 
 void DSPChannel::begin(uint8_t adcPin, uint16_t sampleSize, uint32_t sampleRate, uint16_t* buffer) {
   // Initialize active buffer pointer
@@ -44,10 +44,19 @@ uint16_t* DSPChannel::getWaveform() {
   return _activeBuffer;
 }
 float* DSPChannel::getWaveformFloat() {
-  return _fbuffer;
+  return getWaveformVolts();
+}
+float* DSPChannel::getWaveformVolts() {
+  return _fbuffer;  // pre-converted in processBuffer()
 }
 float* DSPChannel::getSpectrum() {
   return _spectrum;
+}
+
+float DSPChannel::adcCountToInputVolts(uint16_t adcCount) const {
+  // ADC count -> ADC pin volts -> remove analog offset -> undo divider attenuation.
+  const float adcVolts = (adcCount / ADC_MAX_COUNTS) * ADC_VREF_VOLTS;
+  return (adcVolts - ADC_INPUT_OFFSET_VOLTS) / ADC_INPUT_DIVIDER_GAIN;
 }
 
 
@@ -57,7 +66,7 @@ float* DSPChannel::getSpectrum() {
 void DSPChannel::computeFFT() {
   // Prepare complex input
   for (uint16_t i = 0; i < _sampleSize; i++) {
-    float v = (_activeBuffer[i] / ADC_MAX) * ADC_REF;
+    float v = adcCountToInputVolts(_activeBuffer[i]);
     v -= _dc;         // Remove DC
     v *= _window[i];  // Apply Hann window
 
@@ -171,7 +180,7 @@ void DSPChannel::processBuffer() {
   _vMax = -1000.0f;
 
   for (uint16_t i = 0; i < _sampleSize; i++) {
-    float v = ((_activeBuffer[i] - ADC_OFFSET) / ADC_MAX) * ADC_REF;
+    float v = adcCountToInputVolts(_activeBuffer[i]);
     _fbuffer[i] = v;
     sum += v;
 
@@ -183,6 +192,10 @@ void DSPChannel::processBuffer() {
 
   _rms = sqrtf(sumSq / _sampleSize);
   _dc = sum / _sampleSize;
+}
+
+void DSPChannel::setSampleRate(uint32_t sampleRate) {
+  _sampleRate = sampleRate;
 }
 
 

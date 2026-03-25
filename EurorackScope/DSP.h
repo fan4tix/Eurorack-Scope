@@ -6,7 +6,7 @@
 #include <hardware/irq.h>
 #include <pico/stdlib.h>
 #include "DSPChannel.h"
-#define DSP_MAX_SAMPLES 1024
+#define DSP_MAX_SAMPLES 2048
 #define NUM_DMA_BUFFERS 2
 
 class DSP {
@@ -18,6 +18,7 @@ public:
   void update();
 
   uint16_t* getWaveform(uint8_t ch);
+  float* getWaveformVolts(uint8_t ch);
   uint16_t getSampleSize();
   void changeSampleRate(uint32_t newRate);
   uint32_t getSampleRate();
@@ -27,6 +28,7 @@ private:
   void restartDMA();
   void setupADC();
   void setupDMA();
+  void alignADCChannelOrder();
   static void dmaISR();
 
   uint8_t _pin0;

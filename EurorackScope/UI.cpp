@@ -14,8 +14,8 @@ UI::UI(UIContext* ctx,
        uint8_t appCount)
   : _apps(apps),
     _appCount(appCount),
-    _ctx(ctx),
-    _currentApp(apps[3]) {
+    _currentApp(apps[3]),
+    _ctx(ctx) {
 
 
   _currentMenu = _currentApp->getMenu();
@@ -23,6 +23,9 @@ UI::UI(UIContext* ctx,
 }
 
 void UI::begin() {
+  if (_currentApp) {
+    _currentApp->onEnter(*_ctx);
+  }
   drawApp(true);
 }
 
@@ -60,7 +63,6 @@ void UI::back() {
 uint8_t UI::update(int8_t encoderDelta) {
   _ctx->encoderDelta = encoderDelta;
   bool buttonPressed = _ctx->buttons->shortPressed(ENC_BTN);
-  bool buttonLongPressed = _ctx->buttons->shortPressed(ENC_BTN);
   bool backPressed = _ctx->buttons->shortPressed(BACK_BTN);
 
   uint8_t settingsDirty = false;
