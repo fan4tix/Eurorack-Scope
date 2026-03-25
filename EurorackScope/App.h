@@ -5,26 +5,26 @@
 
 class App {
 public:
-    App(const Menu* rootMenu)
-        : _menu(rootMenu) {}
+  App(const Menu* rootMenu)
+    : _menu(rootMenu) {}
 
-    virtual ~App() {}
+  virtual ~App() {}
 
-    // lifecycle
-    virtual void onEnter(UIContext& ctx) {}
-    virtual void onExit(UIContext& ctx) {}
+  // lifecycle
+  virtual void onEnter(UIContext& ctx) {}
+  virtual void onExit(UIContext& ctx) {}
 
-    // main rendering
-    virtual void draw(UIContext& ctx, bool fullRedraw) = 0;
+  // main rendering
+  virtual void draw(UIContext& ctx, bool fullRedraw) = 0;
 
-    // optional update hook
-    virtual void update(UIContext& ctx) {}
+  // optional update hook
+  virtual void update(UIContext& ctx) {}
 
-    // shared menu access
-    const Menu* getMenu() const {
-        return _menu;
-    }
+  // shared menu access
+  const Menu* getMenu() const {
+    return _menu;
+  }
 
 protected:
-    const Menu* _menu;
+  const Menu* _menu;
 };

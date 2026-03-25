@@ -17,27 +17,27 @@ static const float LISSA_AMP_VALUES[] = { 10, 5, 2, 1, .5, .2, .1 };
 
 class LissajousApp : public App {
 public:
-    LissajousApp(const Menu* menu);
-    void onEnter(UIContext& ctx) override;
+  LissajousApp(const Menu* menu);
+  void onEnter(UIContext& ctx) override;
 
-    void draw(UIContext& ctx, bool fullRedraw) override;
+  void draw(UIContext& ctx, bool fullRedraw) override;
 
 private:
-    uint32_t computeSampleRate(uint16_t sampleSize, float windowMs) const;
-    void applyConfiguredSampleRate(UIContext& ctx) const;
-    void drawOverlayUI(UIContext& ctx);
-    void processInput(UIContext& ctx);
-    void markUIActivity();
-    bool shouldShowUI() const;
+  uint32_t computeSampleRate(uint16_t sampleSize, float windowMs) const;
+  void applyConfiguredSampleRate(UIContext& ctx) const;
+  void drawOverlayUI(UIContext& ctx);
+  void processInput(UIContext& ctx);
+  void markUIActivity();
+  bool shouldShowUI() const;
 
-    bool _gridDrawn = false;
-    uint8_t _selectionIndex = 0;
-    bool _editing = false;
-    uint32_t _uiVisibleUntilMs = 0;
-    static const uint32_t kUIVisibleMs = 2000;
+  bool _gridDrawn = false;
+  uint8_t _selectionIndex = 0;
+  bool _editing = false;
+  uint32_t _uiVisibleUntilMs = 0;
+  static const uint32_t kUIVisibleMs = 2000;
 
-    const LissajousOption _time{ 8, LISSA_TIME_NAMES, LISSA_TIME_VALUES };
-    const LissajousOption _amplitude{ 7, LISSA_AMP_NAMES, LISSA_AMP_VALUES };
-    uint8_t _timeIndex = 0;
-    uint8_t _amplitudeIndex = 3;
+  const LissajousOption _time{ 8, LISSA_TIME_NAMES, LISSA_TIME_VALUES };
+  const LissajousOption _amplitude{ 7, LISSA_AMP_NAMES, LISSA_AMP_VALUES };
+  uint8_t _timeIndex = 0;
+  uint8_t _amplitudeIndex = 3;
 };

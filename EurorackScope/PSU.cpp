@@ -148,7 +148,7 @@ float PSU::readRP2040(uint8_t pin, float divider) {
 
   // Store current ADC state
   bool adc_running = adc_hw->cs & ADC_CS_EN_BITS;
-  
+
 
   // Select the input
   adc_select_input(pin - 26);

@@ -43,34 +43,34 @@ struct Menu {
 // callbacks
 // --------------------------------------------------
 inline void actionFactoryReset() {
- ui.back();
- ui.back();
- ui.back();
- ui.back();
+  ui.back();
+  ui.back();
+  ui.back();
+  ui.back();
 }
 
 inline void actionBack() {
- ui.back();
+  ui.back();
 }
 
 inline void actionScope() {
- ui.changeMode(MODE_SCOPE);
+  ui.changeMode(MODE_SCOPE);
 }
 inline void actionVoltmeter() {
- ui.changeMode(MODE_VOLTMETER);
+  ui.changeMode(MODE_VOLTMETER);
 }
 inline void actionFFT() {
- ui.changeMode(MODE_FFT);
+  ui.changeMode(MODE_FFT);
 }
 inline void actionTuner() {
- ui.changeMode(MODE_TUNER);
+  ui.changeMode(MODE_TUNER);
 }
 inline void actionLissa() {
- ui.changeMode(MODE_LISSA);
+  ui.changeMode(MODE_LISSA);
 }
 
 inline void actionPSU() {
- ui.changeMode(MODE_PSU);
+  ui.changeMode(MODE_PSU);
 }
 
 
@@ -123,8 +123,8 @@ inline void actionCalibrateBoth() {
 }
 
 const MenuItem calibrateItems[] = {
-  { "CH1",  MENU_ACTION, nullptr, actionCalibrateCh1,  nullptr, 0, 0, 0 },
-  { "CH2",  MENU_ACTION, nullptr, actionCalibrateCh2,  nullptr, 0, 0, 0 },
+  { "CH1", MENU_ACTION, nullptr, actionCalibrateCh1, nullptr, 0, 0, 0 },
+  { "CH2", MENU_ACTION, nullptr, actionCalibrateCh2, nullptr, 0, 0, 0 },
   { "Both", MENU_ACTION, nullptr, actionCalibrateBoth, nullptr, 0, 0, 0 }
 };
 
@@ -272,9 +272,9 @@ const Menu lissaMenu = {
 // --------------------------------------------------
 const MenuItem voltmeterItems[] = {
 
-  { "Mode",      MENU_SUBMENU, &modeMenu,               0, 0, 0, 0, 0 },
+  { "Mode", MENU_SUBMENU, &modeMenu, 0, 0, 0, 0, 0 },
   { "Calibrate", MENU_SUBMENU, &calibrateMenu, 0, 0, 0, 0, 0 },
-  { "Settings",  MENU_SUBMENU, &settingsMenu,           0, 0, 0, 0, 0 }
+  { "Settings", MENU_SUBMENU, &settingsMenu, 0, 0, 0, 0, 0 }
 
 };
 

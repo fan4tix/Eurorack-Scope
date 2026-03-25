@@ -5,12 +5,12 @@
 #include <INA226_WE.h>
 
 // TODO insert correct address
-#define INA_A_5V_ADDR   0x40
-#define INA_A_12V_ADDR  0x41
+#define INA_A_5V_ADDR 0x40
+#define INA_A_12V_ADDR 0x41
 #define INA_A_N12V_ADDR 0x42
 
-#define INA_B_5V_ADDR   0x43
-#define INA_B_12V_ADDR  0x44
+#define INA_B_5V_ADDR 0x43
+#define INA_B_12V_ADDR 0x44
 #define INA_B_N12V_ADDR 0x45
 
 class PSU {

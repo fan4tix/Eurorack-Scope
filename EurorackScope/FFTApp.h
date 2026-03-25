@@ -7,14 +7,14 @@ static const uint8_t FFT_MAX_FREQ_COUNT = 5;
 
 class FFTApp : public App {
 public:
-    FFTApp(const Menu* menu);
-    void onEnter(UIContext& ctx) override;
+  FFTApp(const Menu* menu);
+  void onEnter(UIContext& ctx) override;
 
-    void draw(UIContext& ctx, bool fullRedraw) override;
+  void draw(UIContext& ctx, bool fullRedraw) override;
 
 private:
-    bool _gridDrawn = false;
-    uint8_t _activeChannel = 0;
-    uint8_t _maxFreqIdx = 3;   // default 8 kHz
-    bool _editingFreq = false; // encoder controls freq range when true
+  bool _gridDrawn = false;
+  uint8_t _activeChannel = 0;
+  uint8_t _maxFreqIdx = 3;    // default 8 kHz
+  bool _editingFreq = false;  // encoder controls freq range when true
 };

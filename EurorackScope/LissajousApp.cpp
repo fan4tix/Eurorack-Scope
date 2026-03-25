@@ -19,8 +19,7 @@ static uint8_t wrapIndex(int16_t value, uint8_t len) {
 }
 
 LissajousApp::LissajousApp(const Menu* menu)
-: App(menu)
-{
+  : App(menu) {
 }
 
 void LissajousApp::onEnter(UIContext& ctx) {
@@ -134,8 +133,7 @@ void LissajousApp::processInput(UIContext& ctx) {
   }
 }
 
-void LissajousApp::draw(UIContext& ctx, bool fullRedraw)
-{
+void LissajousApp::draw(UIContext& ctx, bool fullRedraw) {
   (void)fullRedraw;
 
   processInput(ctx);
@@ -169,4 +167,3 @@ void LissajousApp::draw(UIContext& ctx, bool fullRedraw)
 
   d->display();
 }
-

@@ -123,7 +123,7 @@ void TunerApp::draw(UIContext& ctx, bool fullRedraw) {
   if (arrowX > barRight) arrowX = barRight;
 
   //d->drawLine(arrowX, arrowTop, arrowX, barY - 1, SH110X_WHITE);
-  d->drawTriangle(arrowX - 3, arrowTop, arrowX + 3, arrowTop , arrowX, arrowTop+ 4, SH110X_WHITE);
+  d->drawTriangle(arrowX - 3, arrowTop, arrowX + 3, arrowTop, arrowX, arrowTop + 4, SH110X_WHITE);
 
   d->setTextSize(2);
   d->setTextColor(SH110X_WHITE, SH110X_BLACK);

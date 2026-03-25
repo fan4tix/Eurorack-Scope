@@ -68,7 +68,7 @@ void FFTApp::draw(UIContext& ctx, bool fullRedraw) {
   // maxBin is the highest bin whose centre frequency <= maxFreqHz.
   const uint32_t maxFreqHz = FFT_MAX_FREQ_OPTIONS[_maxFreqIdx];
   uint16_t maxBin = (uint16_t)((uint32_t)maxFreqHz * sampleSize / sampleRate);
-  if (maxBin < 2)          maxBin = 2;
+  if (maxBin < 2) maxBin = 2;
   if (maxBin >= spectrumBins) maxBin = spectrumBins - 1;
 
   // Find peak magnitude within the displayed range.
@@ -97,10 +97,10 @@ void FFTApp::draw(UIContext& ctx, bool fullRedraw) {
   // average magnitude of its assigned bins.
   const uint16_t usableBins = maxBin;  // bins 1..maxBin
   for (uint16_t i = 0; i < width; i++) {
-    uint16_t binFirst = 1 + ((uint32_t)i       * usableBins) / width;
-    uint16_t binLast  = 1 + ((uint32_t)(i + 1) * usableBins) / width;
-    if (binLast > maxBin)       binLast = maxBin;
-    if (binLast < binFirst)     binLast = binFirst;
+    uint16_t binFirst = 1 + ((uint32_t)i * usableBins) / width;
+    uint16_t binLast = 1 + ((uint32_t)(i + 1) * usableBins) / width;
+    if (binLast > maxBin) binLast = maxBin;
+    if (binLast < binFirst) binLast = binFirst;
 
     float sum = 0.0f;
     for (uint16_t b = binFirst; b <= binLast; b++) {

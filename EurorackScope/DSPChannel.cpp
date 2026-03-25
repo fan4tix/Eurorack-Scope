@@ -9,7 +9,7 @@ void DSPChannel::begin(uint8_t adcPin, uint16_t sampleSize, uint32_t sampleRate,
   _adcPin = adcPin;
   _sampleSize = sampleSize;
   _sampleRate = sampleRate;
- 
+
   _activeBuffer = buffer;
 
   // Initialize FFT
@@ -206,5 +206,3 @@ void DSPChannel::calibrate() {
 void DSPChannel::clearCalibration() {
   _calibrationOffset = 0.0f;
 }
-
-
