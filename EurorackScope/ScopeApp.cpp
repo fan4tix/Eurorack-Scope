@@ -137,7 +137,8 @@ void ScopeApp::draw(UIContext& ctx, bool fullRedraw) {
   const uint16_t plotWidth = 128;
   const bool showBothChannels = (_channelIndex == 2);
   float* waveformVolts0 = dsp->getWaveformVolts(0);
-  float* waveformVolts1 = showBothChannels ? dsp->getWaveformVolts(1) : nullptr;
+  const bool needChannel2 = showBothChannels || (_channelIndex == 1);
+  float* waveformVolts1 = needChannel2 ? dsp->getWaveformVolts(1) : nullptr;
   float* activeWaveform = (_channelIndex % 2 == 0) ? waveformVolts0 : waveformVolts1;
   float* triggerWaveform = showBothChannels ? waveformVolts0 : activeWaveform;
 
