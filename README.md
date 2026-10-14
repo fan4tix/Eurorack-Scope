@@ -1,6 +1,6 @@
 # Eurorack Oscilloscope
 
-![Eurorack Oscilloscope](hero.jpg)
+![Eurorack Oscilloscope](hero.jpg | width=50)
 
 A compact, multi-function signal analyser for Eurorack modular synthesisers. Built around an RP2040 microcontroller, it samples two CV/audio inputs simultaneously via DMA-driven ADC and displays the result on a 128×64 OLED. Six apps are accessible from a navigation menu: oscilloscope, FFT spectrum analyser, Lissajous display, chromatic tuner, voltmeter, and PSU monitor.
 
